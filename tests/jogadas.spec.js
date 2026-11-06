@@ -70,3 +70,14 @@ test('TC-DO-09 peça que encaixa nas duas pontas: o jogador escolhe o lado', asy
   expect(screen.getByTestId('ponta-esquerda')).toHaveTextContent(/^1$/);
   expect(screen.getByTestId('escolha-lado')).not.toBeVisible();
 });
+
+test('TC-DO-20 peça que encaixa nas duas pontas: escolher a direita', async () => {
+  const user = await abrirJogo(CENARIO_JOGADAS);
+  await ateTC07(user); // pontas 6 e 1
+  await jogarPeca(user, 'j2', '1-6');
+  expect(screen.getByTestId('escolha-lado')).toBeVisible();
+  await user.click(screen.getByTestId('btn-direita'));
+  expect(pecasDaMesa()).toEqual(['6-6', '6-3', '3-1', '1-6']);
+  expect(screen.getByTestId('ponta-direita')).toHaveTextContent(/^6$/);
+  expect(screen.getByTestId('escolha-lado')).not.toBeVisible();
+});
