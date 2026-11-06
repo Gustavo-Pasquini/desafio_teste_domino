@@ -191,6 +191,11 @@ Se qualquer um dos três for usado, **só existem as peças listadas** (as outra
 Cenário fixo usado nos testes de jogada (fica no `tests/helpers.js`):
 `CENARIO_JOGADAS` = `?j1=6-6,1-3,0-0&j2=3-6,1-6,2-2&monte=` — J1 começa (tem 6-6).
 
+### Esclarecimentos da revisão (contrato)
+
+- Os parâmetros `j1`, `j2` e `monte` valem só para a partida que começa ao abrir a página. `btn-nova-partida` depois disso sorteia uma partida normal (7 + 7 + 14).
+- Peça bloqueada tem o atributo `disabled`.
+
 ## 4. Divisão de tarefas
 
 > ⚠️ **Modo atual: somente testes.** A fase GREEN (implementar o jogo) está desativada até segunda ordem. As tarefas abaixo são de **escrever os casos de teste**; o código do jogo não é feito. Cada teste fica **falhando pelo motivo certo**. Quando a implementação for liberada: [docs/FASE-GREEN.md](docs/FASE-GREEN.md).
