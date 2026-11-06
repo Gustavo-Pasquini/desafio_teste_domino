@@ -16,3 +16,17 @@ test('TC-DO-01 nova partida: 7 peças para cada um e 14 no monte', async () => {
   expect(screen.getByTestId('monte-qtd')).toHaveTextContent(/^14$/);
   expect(pecasDaMesa()).toHaveLength(0);
 });
+
+test('TC-DO-02 peças distribuídas são do duplo-seis e não se repetem (20 partidas)', async () => {
+  for (let i = 0; i < 20; i++) {
+    await novaPartida();
+    const ids = [...pecasNaMao('j1'), ...pecasNaMao('j2')].map((p) => p.getAttribute('data-testid'));
+    expect(ids).toHaveLength(14);
+    for (const id of ids) {
+      const [, a, b] = id.match(/^peca-([0-6])-([0-6])$/) ?? [];
+      expect(a, `${id} não é uma peça de 0-0 a 6-6`).toBeDefined();
+      expect(Number(a)).toBeLessThanOrEqual(Number(b));
+    }
+    expect(new Set(ids).size).toBe(14);
+  }
+});
