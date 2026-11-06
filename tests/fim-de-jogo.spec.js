@@ -34,3 +34,16 @@ test.each([
   expect(screen.getByTestId('pontos-j1')).toHaveTextContent(/^0$/);
   expect(screen.getByTestId('pontos-j2')).toHaveTextContent(/^0$/);
 });
+
+test('TC-DO-17 nova partida restaura distribuição', async () => {
+  const user = await abrirJogo({ j1: '6-6,3-6', j2: '1-6,2-4,0-0', monte: '' });
+  await jogarPeca(user, 'j1', '6-6');
+  await jogarPeca(user, 'j2', '1-6');
+  await jogarPeca(user, 'j1', '3-6');
+  await user.click(screen.getByTestId('btn-nova-partida'));
+  expect(within(screen.getByTestId('mao-j1')).getAllByTestId(/^peca-/)).toHaveLength(7);
+  expect(within(screen.getByTestId('mao-j2')).getAllByTestId(/^peca-/)).toHaveLength(7);
+  expect(screen.getByTestId('monte-qtd')).toHaveTextContent(/^14$/);
+  expect(screen.getByTestId('mesa').children).toHaveLength(0);
+  expect(screen.getByTestId('mensagem')).toBeEmptyDOMElement();
+});
