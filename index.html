@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dominó</title>
+</head>
+<body>
+  <!--
+    ESQUELETO DA TELA (contrato da seção 3 do PLANEJAMENTO.md).
+    Elementos fixos, VAZIOS: sem texto, sem valor e sem atributos de estado
+    (data-estado, disabled, hidden). Os testes abrem este HTML.
+    Fase GREEN desativada: o jogo (js/) ainda não existe.
+  -->
+  <header>
+    <button data-testid="btn-nova-partida"></button>
+    <span data-testid="vez"></span>
+    <span data-testid="pontos-j1"></span>
+    <span data-testid="pontos-j2"></span>
+    <span data-testid="monte-qtd"></span>
+  </header>
+  <section>
+    <div data-testid="mao-j2"></div>
+  </section>
+  <main>
+    <span data-testid="ponta-esquerda"></span>
+    <div data-testid="mesa"></div>
+    <span data-testid="ponta-direita"></span>
+    <div data-testid="escolha-lado">
+      <button data-testid="btn-esquerda"></button>
+      <button data-testid="btn-direita"></button>
+    </div>
+  </main>
+  <section>
+    <div data-testid="mao-j1"></div>
+    <button data-testid="btn-comprar"></button>
+    <button data-testid="btn-passar"></button>
+  </section>
+  <footer>
+    <p data-testid="mensagem"></p>
+  </footer>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
