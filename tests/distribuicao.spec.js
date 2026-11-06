@@ -1,0 +1,53 @@
+// Testes de peças, distribuição e de quem começa (Gustavo — G2, G3). Casos da seção 5 do PLANEJAMENTO.md.
+// Modo somente testes: o jogo ainda não existe, então estes testes FALHAM de propósito.
+import { test, expect } from 'vitest';
+import { abrirJogo, screen, pecasNaMao, jogarPeca, pecasDaMesa } from './helpers.js';
+
+async function novaPartida() {
+  const user = await abrirJogo();
+  await user.click(screen.getByTestId('btn-nova-partida'));
+  return user;
+}
+
+test('TC-DO-01 nova partida: 7 peças para cada um e 14 no monte', async () => {
+  await novaPartida();
+  expect(pecasNaMao('j1')).toHaveLength(7);
+  expect(pecasNaMao('j2')).toHaveLength(7);
+  expect(screen.getByTestId('monte-qtd')).toHaveTextContent(/^14$/);
+  expect(pecasDaMesa()).toHaveLength(0);
+});
+
+test('TC-DO-02 peças distribuídas são do duplo-seis e não se repetem (20 partidas)', async () => {
+  for (let i = 0; i < 20; i++) {
+    await novaPartida();
+    const ids = [...pecasNaMao('j1'), ...pecasNaMao('j2')].map((p) => p.getAttribute('data-testid'));
+    expect(ids).toHaveLength(14);
+    for (const id of ids) {
+      const [, a, b] = id.match(/^peca-([0-6])-([0-6])$/) ?? [];
+      expect(a, `${id} não é uma peça de 0-0 a 6-6`).toBeDefined();
+      expect(Number(a)).toBeLessThanOrEqual(Number(b));
+    }
+    expect(new Set(ids).size).toBe(14);
+  }
+});
+
+/** Peça de saída pela regra da seção 1: a maior dupla; sem dupla, a de maior soma. */
+function pecaDeSaida(ids) {
+  const pecas = ids.map((id) => id.replace('peca-', '').split('-').map(Number));
+  const duplas = pecas.filter(([a, b]) => a === b).sort((x, y) => y[0] - x[0]);
+  const [a, b] = duplas[0] ?? [...pecas].sort((x, y) => y[0] + y[1] - (x[0] + x[1]))[0];
+  return `${a}-${b}`;
+}
+
+test('TC-DO-10 só a mão do jogador da vez fica virada para cima', async () => {
+  const user = await novaPartida();
+  const vez = screen.getByTestId('vez').textContent.trim().toLowerCase();
+  expect(['j1', 'j2']).toContain(vez);
+  const outro = vez === 'j1' ? 'j2' : 'j1';
+  for (const p of pecasNaMao(vez)) expect(p).toHaveAttribute('data-face', 'cima');
+  for (const p of pecasNaMao(outro)) expect(p).toHaveAttribute('data-face', 'baixo');
+
+  await jogarPeca(user, vez, pecaDeSaida(pecasNaMao(vez).map((p) => p.getAttribute('data-testid'))));
+  for (const p of pecasNaMao(outro)) expect(p).toHaveAttribute('data-face', 'cima');
+  for (const p of pecasNaMao(vez)) expect(p).toHaveAttribute('data-face', 'baixo');
+});
