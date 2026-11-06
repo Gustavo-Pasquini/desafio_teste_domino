@@ -33,7 +33,7 @@ test.each([
 ])('TC-DO-16 jogo trancado com empate começando por %s', async (_inicio, cenario, jogador) => {
   const user = await abrirJogo(cenario);
   await jogarPeca(user, jogador, '6-6');
-  expect(screen.getByTestId('mensagem')).toHaveTextContent('Empate');
+  expect(screen.getByTestId('mensagem')).toHaveTextContent(/^Empate$/);
   expect(screen.getByTestId('pontos-j1')).toHaveTextContent(/^0$/);
   expect(screen.getByTestId('pontos-j2')).toHaveTextContent(/^0$/);
 });
