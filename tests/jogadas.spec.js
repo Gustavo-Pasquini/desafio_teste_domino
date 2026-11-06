@@ -31,3 +31,12 @@ test('TC-DO-07 a peça é girada para encaixar', async () => {
   expect(screen.getByTestId('ponta-direita')).toHaveTextContent(/^1$/);
   expect(screen.getByTestId('escolha-lado')).not.toBeVisible();
 });
+
+test('TC-DO-08 peça que não encaixa é recusada', async () => {
+  const user = await abrirJogo(CENARIO_JOGADAS);
+  await ateTC06(user); // pontas 6 e 3
+  await jogarPeca(user, 'j1', '0-0');
+  expect(screen.getByTestId('mensagem')).toHaveTextContent('Jogada inválida');
+  expect(pecasNaMao('j1').map((p) => p.getAttribute('data-testid'))).toContain('peca-0-0');
+  expect(screen.getByTestId('vez')).toHaveTextContent(/^J1$/);
+});
