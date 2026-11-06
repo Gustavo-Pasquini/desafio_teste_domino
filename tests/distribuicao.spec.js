@@ -59,3 +59,12 @@ test('TC-DO-03 quem tem a maior dupla começa', async () => {
   await abrirJogo(CENARIO_6_6_COM_J2);
   expect(screen.getByTestId('vez')).toHaveTextContent(/^J2$/);
 });
+
+test('TC-DO-04 a primeira jogada tem que ser a maior dupla', async () => {
+  const user = await abrirJogo(CENARIO_6_6_COM_J2);
+  await jogarPeca(user, 'j2', '2-3');
+  expect(screen.getByTestId('mensagem')).toHaveTextContent('Jogada inválida');
+  expect(pecasDaMesa()).toHaveLength(0);
+  await jogarPeca(user, 'j2', '6-6');
+  expect(pecasDaMesa()).toEqual(['6-6']);
+});
