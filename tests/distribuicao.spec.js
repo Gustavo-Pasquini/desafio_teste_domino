@@ -51,3 +51,11 @@ test('TC-DO-10 só a mão do jogador da vez fica virada para cima', async () => 
   for (const p of pecasNaMao(outro)) expect(p).toHaveAttribute('data-face', 'cima');
   for (const p of pecasNaMao(vez)) expect(p).toHaveAttribute('data-face', 'baixo');
 });
+
+// Só J2 tem dupla (6-6). Monte vazio.
+const CENARIO_6_6_COM_J2 = { j1: '1-2,0-3,4-5', j2: '6-6,2-3,0-1', monte: '' };
+
+test('TC-DO-03 quem tem a maior dupla começa', async () => {
+  await abrirJogo(CENARIO_6_6_COM_J2);
+  expect(screen.getByTestId('vez')).toHaveTextContent(/^J2$/);
+});
