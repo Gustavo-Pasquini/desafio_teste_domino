@@ -23,3 +23,14 @@ test.each([
   expect(screen.getByTestId('mensagem')).toHaveTextContent(`Jogo trancado — ${vencedor} venceu!`);
   expect(screen.getByTestId(placar)).toHaveTextContent(new RegExp(`^${pontos}$`));
 });
+
+test.each([
+  ['J1', { j1: '6-6,0-4', j2: '1-3,2-2', monte: '' }, 'j1'],
+  ['J2', { j1: '1-3,2-2', j2: '6-6,0-4', monte: '' }, 'j2'],
+])('TC-DO-16 jogo trancado com empate começando por %s', async (_inicio, cenario, jogador) => {
+  const user = await abrirJogo(cenario);
+  await jogarPeca(user, jogador, '6-6');
+  expect(screen.getByTestId('mensagem')).toHaveTextContent('Empate');
+  expect(screen.getByTestId('pontos-j1')).toHaveTextContent(/^0$/);
+  expect(screen.getByTestId('pontos-j2')).toHaveTextContent(/^0$/);
+});
