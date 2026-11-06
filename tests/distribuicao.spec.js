@@ -30,3 +30,24 @@ test('TC-DO-02 peças distribuídas são do duplo-seis e não se repetem (20 par
     expect(new Set(ids).size).toBe(14);
   }
 });
+
+/** Peça de saída pela regra da seção 1: a maior dupla; sem dupla, a de maior soma. */
+function pecaDeSaida(ids) {
+  const pecas = ids.map((id) => id.replace('peca-', '').split('-').map(Number));
+  const duplas = pecas.filter(([a, b]) => a === b).sort((x, y) => y[0] - x[0]);
+  const [a, b] = duplas[0] ?? [...pecas].sort((x, y) => y[0] + y[1] - (x[0] + x[1]))[0];
+  return `${a}-${b}`;
+}
+
+test('TC-DO-10 só a mão do jogador da vez fica virada para cima', async () => {
+  const user = await novaPartida();
+  const vez = screen.getByTestId('vez').textContent.trim().toLowerCase();
+  expect(['j1', 'j2']).toContain(vez);
+  const outro = vez === 'j1' ? 'j2' : 'j1';
+  for (const p of pecasNaMao(vez)) expect(p).toHaveAttribute('data-face', 'cima');
+  for (const p of pecasNaMao(outro)) expect(p).toHaveAttribute('data-face', 'baixo');
+
+  await jogarPeca(user, vez, pecaDeSaida(pecasNaMao(vez).map((p) => p.getAttribute('data-testid'))));
+  for (const p of pecasNaMao(outro)) expect(p).toHaveAttribute('data-face', 'cima');
+  for (const p of pecasNaMao(vez)) expect(p).toHaveAttribute('data-face', 'baixo');
+});
