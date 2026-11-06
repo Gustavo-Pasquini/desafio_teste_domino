@@ -42,4 +42,11 @@ O projeto está preparado para **Claude Code** e **Codex**. Os dois escrevem os 
 - Claude Code: `/tdd G2` · Codex: `$tdd G2` · depois, "go" escreve o próximo caso de teste.
 - Detalhes, técnicas e fontes: [docs/TDD-COM-IA.md](docs/TDD-COM-IA.md).
 
-> Status: em planejamento. A tabela "ID → arquivo → o que verifica" será preenchida aqui conforme os testes forem escritos (tarefa B1).
+## Rastreabilidade dos testes
+
+| IDs | Arquivo | O que verifica |
+|---|---|---|
+| TC-DO-01–05, 10, 18–19 | `tests/distribuicao.spec.js` | Distribuição, peças, faces e jogador inicial |
+| TC-DO-06–09, 20–21 | `tests/jogadas.spec.js` | Encaixe, giro, jogada inválida e escolha do lado |
+| TC-DO-11–13 | `tests/compra.spec.js` | Compra do monte e passe |
+| TC-DO-14–17 | `tests/fim-de-jogo.spec.js` | Batida, pontuação, jogo trancado, empate e nova partida |
