@@ -212,7 +212,7 @@ Cada integrante é **dono de arquivos de teste diferentes** (coluna "Arquivos").
 |---|---|---|---|
 | **G1** Setup: `package.json`, `vitest.config.js` (`environment: 'jsdom'`), `js/main.js` vazio, `.gitignore`, `index.html` esqueleto (elementos fixos da seção 3 **vazios**, sem texto nem atributos de estado), `tests/helpers.js` com `abrirJogo(params)` e `CENARIO_JOGADAS` | `gustavo/g1-setup` | index.html, js/main.js, config, tests/helpers.js | — |
 | **G2** 28 peças e distribuição | `gustavo/g2-distribuicao` | tests/distribuicao.spec.js | TC-DO-01, 02, 10 |
-| **G3** Quem começa | `gustavo/g3-quem-comeca` | tests/distribuicao.spec.js | TC-DO-03 a 05 |
+| **G3** Quem começa | `gustavo/g3-quem-comeca` | tests/distribuicao.spec.js | TC-DO-03 a 05, 18 |
 | **G4** Encaixar e girar peças, jogada inválida, alternar vez | `gustavo/g4-jogadas` | tests/jogadas.spec.js | TC-DO-06 a 08 |
 | **G5** Escolher o lado | `gustavo/g5-lado` | tests/jogadas.spec.js | TC-DO-09 |
 
@@ -242,6 +242,7 @@ Cada integrante é **dono de arquivos de teste diferentes** (coluna "Arquivos").
 | TC-DO-08 | Jogada inválida | Depois do TC-DO-06 (pontas 6 e 3), J1 clica 0-0 | `mensagem` = "Jogada inválida"; 0-0 continua na mão; `vez` continua J1 |
 | TC-DO-09 | Escolher o lado | Depois do TC-DO-07 (pontas 6 e 1), J2 clica 1-6 | `escolha-lado` aparece; `btn-esquerda` → peça entra à esquerda como `1-6` e `ponta-esquerda` = 1 |
 | TC-DO-10 | Mão escondida | Nova partida | Peças do jogador da vez `data-face="cima"`, do outro `"baixo"`; depois de jogar, invertem |
+| TC-DO-18 | Dupla vence soma | `j1=1-1,0-2`, `j2=5-6,0-3`, `monte=` (J2 tem a maior soma, mas só J1 tem dupla) | `vez` = J1; J1 joga 1-1 → mesa = `1-1` |
 
 ### Breno — compra, passe e fim da partida
 
