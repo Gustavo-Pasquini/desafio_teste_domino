@@ -33,6 +33,22 @@ test('TC-DO-07 a peça é girada para encaixar', async () => {
   expect(screen.getByTestId('escolha-lado')).not.toBeVisible();
 });
 
+// J1 = 6-6, 2-6, 0-0 · J2 = 3-6, 2-5, 1-1. Depois de 6-6 e 3-6, as pontas são 6 (esq.) e 3 (dir.):
+// 2-6 só encaixa na esquerda; depois, 2-5 só encaixa na esquerda (no 2) e precisa virar 5-2.
+const CENARIO_GIRO_ESQUERDA = { j1: '6-6,2-6,0-0', j2: '3-6,2-5,1-1', monte: '' };
+
+test('TC-DO-21 a peça é girada também na ponta esquerda', async () => {
+  const user = await abrirJogo(CENARIO_GIRO_ESQUERDA);
+  await jogarPeca(user, 'j1', '6-6');
+  await jogarPeca(user, 'j2', '3-6');
+  await jogarPeca(user, 'j1', '2-6');
+  expect(pecasDaMesa()).toEqual(['2-6', '6-6', '6-3']);
+  await jogarPeca(user, 'j2', '2-5');
+  expect(pecasDaMesa()).toEqual(['5-2', '2-6', '6-6', '6-3']);
+  expect(screen.getByTestId('ponta-esquerda')).toHaveTextContent(/^5$/);
+  expect(screen.getByTestId('ponta-direita')).toHaveTextContent(/^3$/);
+});
+
 test('TC-DO-08 peça que não encaixa é recusada', async () => {
   const user = await abrirJogo(CENARIO_JOGADAS);
   await ateTC06(user); // pontas 6 e 3
