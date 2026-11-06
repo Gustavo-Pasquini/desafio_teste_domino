@@ -68,3 +68,17 @@ test('TC-DO-04 a primeira jogada tem que ser a maior dupla', async () => {
   await jogarPeca(user, 'j2', '6-6');
   expect(pecasDaMesa()).toEqual(['6-6']);
 });
+
+// Ninguém tem dupla: começa quem tem a peça de maior soma (5-6, com J1).
+const CENARIO_SEM_DUPLAS = { j1: '5-6,0-1', j2: '4-6,2-3', monte: '' };
+
+test('TC-DO-05 sem duplas, começa a peça de maior soma', async () => {
+  const user = await abrirJogo(CENARIO_SEM_DUPLAS);
+  expect(screen.getByTestId('vez')).toHaveTextContent(/^J1$/);
+  await jogarPeca(user, 'j1', '0-1');
+  expect(screen.getByTestId('mensagem')).toHaveTextContent('Jogada inválida');
+  expect(pecasDaMesa()).toHaveLength(0);
+  await jogarPeca(user, 'j1', '5-6');
+  expect(pecasDaMesa()).toHaveLength(1);
+  expect(['5-6', '6-5']).toContain(pecasDaMesa()[0]);
+});
