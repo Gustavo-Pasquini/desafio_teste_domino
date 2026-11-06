@@ -82,3 +82,13 @@ test('TC-DO-05 sem duplas, começa a peça de maior soma', async () => {
   expect(pecasDaMesa()).toHaveLength(1);
   expect(['5-6', '6-5']).toContain(pecasDaMesa()[0]);
 });
+
+// J1 tem só uma dupla baixa (1-1); J2 tem a peça de maior soma (5-6), mas nenhuma dupla.
+const CENARIO_DUPLA_X_SOMA = { j1: '1-1,0-2', j2: '5-6,0-3', monte: '' };
+
+test('TC-DO-18 dupla vence soma: quem tem dupla começa, mesmo com soma menor', async () => {
+  const user = await abrirJogo(CENARIO_DUPLA_X_SOMA);
+  expect(screen.getByTestId('vez')).toHaveTextContent(/^J1$/);
+  await jogarPeca(user, 'j1', '1-1');
+  expect(pecasDaMesa()).toEqual(['1-1']);
+});
