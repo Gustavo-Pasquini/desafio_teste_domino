@@ -61,9 +61,12 @@ test('TC-DO-08 peça que não encaixa é recusada', async () => {
 test('TC-DO-09 peça que encaixa nas duas pontas: o jogador escolhe o lado', async () => {
   const user = await abrirJogo(CENARIO_JOGADAS);
   await ateTC07(user); // pontas 6 e 1
+  expect(screen.getByTestId('escolha-lado')).not.toBeVisible();
   await jogarPeca(user, 'j2', '1-6');
   expect(screen.getByTestId('escolha-lado')).toBeVisible();
+  expect(pecasDaMesa()).toHaveLength(3); // ainda não entrou: espera a escolha
   await user.click(screen.getByTestId('btn-esquerda'));
-  expect(pecasDaMesa()[0]).toBe('1-6');
+  expect(pecasDaMesa()).toEqual(['1-6', '6-6', '6-3', '3-1']);
   expect(screen.getByTestId('ponta-esquerda')).toHaveTextContent(/^1$/);
+  expect(screen.getByTestId('escolha-lado')).not.toBeVisible();
 });
