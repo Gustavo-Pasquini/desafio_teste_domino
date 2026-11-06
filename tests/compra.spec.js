@@ -20,3 +20,12 @@ test('TC-DO-12 comprar continua até obter peça jogável', async () => {
   expect(pecasNaMao('j2').map((p) => p.dataset.testid)).toContain('peca-4-6');
   expect(screen.getByTestId('btn-comprar')).toBeDisabled();
 });
+
+test('TC-DO-13 passar alterna a vez quando monte está vazio', async () => {
+  const user = await abrirJogo({ j1: '6-6,6-5', j2: '0-1', monte: '' });
+  await jogarPeca(user, 'j1', '6-6');
+  expect(screen.getByTestId('btn-comprar')).toBeDisabled();
+  expect(screen.getByTestId('btn-passar')).toBeEnabled();
+  await user.click(screen.getByTestId('btn-passar'));
+  expect(screen.getByTestId('vez')).toHaveTextContent(/^J1$/);
+});
