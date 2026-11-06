@@ -23,3 +23,11 @@ test('TC-DO-06 a peça encaixa na ponta com o mesmo número', async () => {
   expect(screen.getByTestId('ponta-direita')).toHaveTextContent(/^3$/);
   expect(screen.getByTestId('vez')).toHaveTextContent(/^J1$/);
 });
+
+test('TC-DO-07 a peça é girada para encaixar', async () => {
+  const user = await abrirJogo(CENARIO_JOGADAS);
+  await ateTC07(user); // 1-3 só encaixa no 3
+  expect(pecasDaMesa()).toEqual(['6-6', '6-3', '3-1']);
+  expect(screen.getByTestId('ponta-direita')).toHaveTextContent(/^1$/);
+  expect(screen.getByTestId('escolha-lado')).not.toBeVisible();
+});
