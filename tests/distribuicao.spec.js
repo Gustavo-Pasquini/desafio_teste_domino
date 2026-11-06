@@ -92,3 +92,16 @@ test('TC-DO-18 dupla vence soma: quem tem dupla começa, mesmo com soma menor', 
   await jogarPeca(user, 'j1', '1-1');
   expect(pecasDaMesa()).toEqual(['1-1']);
 });
+
+// J1 tem 3-3 e a peça de maior soma (5-6); J2 tem 5-5, a maior dupla.
+const CENARIO_DUPLAS = { j1: '3-3,5-6', j2: '5-5,1-2', monte: '' };
+
+test('TC-DO-19 a maior dupla começa, entre várias duplas', async () => {
+  const user = await abrirJogo(CENARIO_DUPLAS);
+  expect(screen.getByTestId('vez')).toHaveTextContent(/^J2$/);
+  await jogarPeca(user, 'j2', '1-2');
+  expect(screen.getByTestId('mensagem')).toHaveTextContent('Jogada inválida');
+  expect(pecasDaMesa()).toHaveLength(0);
+  await jogarPeca(user, 'j2', '5-5');
+  expect(pecasDaMesa()).toEqual(['5-5']);
+});
