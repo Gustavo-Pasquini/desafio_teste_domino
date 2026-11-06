@@ -31,6 +31,7 @@ test('TC-DO-12 comprar continua até obter peça jogável', async () => {
 test('TC-DO-13 passar alterna a vez quando monte está vazio', async () => {
   const user = await abrirJogo({ j1: '6-6,6-5', j2: '0-1', monte: '' });
   await jogarPeca(user, 'j1', '6-6');
+  expect(screen.getByTestId('vez')).toHaveTextContent(/^J2$/);
   expect(screen.getByTestId('btn-comprar')).toBeDisabled();
   expect(screen.getByTestId('btn-passar')).toBeEnabled();
   await user.click(screen.getByTestId('btn-passar'));
