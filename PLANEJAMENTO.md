@@ -212,9 +212,9 @@ Cada integrante é **dono de arquivos de teste diferentes** (coluna "Arquivos").
 |---|---|---|---|
 | **G1** Setup: `package.json`, `vitest.config.js` (`environment: 'jsdom'`), `js/main.js` vazio, `.gitignore`, `index.html` esqueleto (elementos fixos da seção 3 **vazios**, sem texto nem atributos de estado), `tests/helpers.js` com `abrirJogo(params)` e `CENARIO_JOGADAS` | `gustavo/g1-setup` | index.html, js/main.js, config, tests/helpers.js | — |
 | **G2** 28 peças e distribuição | `gustavo/g2-distribuicao` | tests/distribuicao.spec.js | TC-DO-01, 02, 10 |
-| **G3** Quem começa | `gustavo/g3-quem-comeca` | tests/distribuicao.spec.js | TC-DO-03 a 05, 18 |
-| **G4** Encaixar e girar peças, jogada inválida, alternar vez | `gustavo/g4-jogadas` | tests/jogadas.spec.js | TC-DO-06 a 08 |
-| **G5** Escolher o lado | `gustavo/g5-lado` | tests/jogadas.spec.js | TC-DO-09 |
+| **G3** Quem começa | `gustavo/g3-quem-comeca` | tests/distribuicao.spec.js | TC-DO-03 a 05, 18, 19 |
+| **G4** Encaixar e girar peças, jogada inválida, alternar vez | `gustavo/g4-jogadas` | tests/jogadas.spec.js | TC-DO-06 a 08, 21 |
+| **G5** Escolher o lado | `gustavo/g5-lado` | tests/jogadas.spec.js | TC-DO-09, 20 |
 
 ### Breno
 
@@ -243,6 +243,9 @@ Cada integrante é **dono de arquivos de teste diferentes** (coluna "Arquivos").
 | TC-DO-09 | Escolher o lado | Depois do TC-DO-07 (pontas 6 e 1), J2 clica 1-6 | `escolha-lado` aparece; `btn-esquerda` → peça entra à esquerda como `1-6` e `ponta-esquerda` = 1 |
 | TC-DO-10 | Mão escondida | Nova partida | Peças do jogador da vez `data-face="cima"`, do outro `"baixo"`; depois de jogar, invertem |
 | TC-DO-18 | Dupla vence soma | `j1=1-1,0-2`, `j2=5-6,0-3`, `monte=` (J2 tem a maior soma, mas só J1 tem dupla) | `vez` = J1; J1 joga 1-1 → mesa = `1-1` |
+| TC-DO-19 | Maior dupla entre várias | `j1=3-3,5-6`, `j2=5-5,1-2`, `monte=` (J1 tem a maior soma; J2, a maior dupla) | `vez` = J2; 1-2 → "Jogada inválida"; 5-5 → mesa = `5-5` |
+| TC-DO-20 | Escolher o lado direito | Depois do TC-DO-07 (pontas 6 e 1), J2 clica 1-6 e `btn-direita` | Mesa = `6-6`, `6-3`, `3-1`, `1-6`; `ponta-direita` = 6 |
+| TC-DO-21 | Girar na ponta esquerda | `j1=6-6,2-6,0-0`, `j2=3-6,2-5,1-1`, `monte=`: 6-6, 3-6, 2-6, 2-5 | Mesa = `5-2`, `2-6`, `6-6`, `6-3`; `ponta-esquerda` = 5 |
 
 ### Breno — compra, passe e fim da partida
 
@@ -255,6 +258,8 @@ Cada integrante é **dono de arquivos de teste diferentes** (coluna "Arquivos").
 | TC-DO-15 | Jogo trancado | `j1=6-6,0-1`, `j2=2-3,4-4`, `monte=`. J1 joga 6-6; ninguém tem 6 | `mensagem` = "Jogo trancado — Jogador 1 venceu!" (1 ponto contra 13); `pontos-j1` = 13 |
 | TC-DO-16 | Trancado com empate | `j1=6-6,0-4`, `j2=1-3,2-2`, `monte=`. J1 joga 6-6 | Somas 4 × 4 (1+3 = 4; 2+2 = 4); `mensagem` = "Empate"; ninguém pontua |
 | TC-DO-17 | Nova partida | Depois do TC-DO-14, clicar `btn-nova-partida` (sem parâmetros) | 7 peças para cada um, monte 14, mesa vazia, `mensagem` vazia |
+
+> **Ajuste da matriz de cobertura:** TC-DO-14 a 16 usam `test.each` também com o Jogador 2 vencendo ("Jogador 2 venceu!", `pontos-j2`).
 
 ## 6. Fluxo de trabalho no Git
 
