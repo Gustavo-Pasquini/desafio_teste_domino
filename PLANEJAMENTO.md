@@ -15,7 +15,7 @@ Partida de dominó para **2 jogadores**: **casos de teste de interface em JavaSc
 - **2 jogadores** no mesmo computador (J1 e J2). Só a mão do jogador da vez fica virada para cima.
 - **Distribuição:** 7 peças para cada um; as 14 restantes formam o **monte** (para compra).
 - **Quem começa:** quem tiver a **maior dupla** (6-6, senão 5-5, …) e é obrigado a jogá-la. Se ninguém tiver dupla, começa quem tiver a peça de maior soma, jogando essa peça.
-- **Jogar:** a peça precisa ter um dos números das **pontas** da mesa. Ela é girada automaticamente para encaixar. Se encaixar nas duas pontas, o jogador escolhe o lado.
+- **Jogar:** a peça precisa ter um dos números das **pontas** da mesa. Ela é girada automaticamente para encaixar. Se encaixar nas duas pontas, o jogador escolhe o lado. Se as duas pontas têm o **mesmo número** (por exemplo, só o 6-6 na mesa), a peça entra à **direita** sem perguntar.
 - **Comprar:** só pode comprar quem não tem nenhuma peça que encaixe. Compra uma por vez, até ter uma jogável ou o monte acabar.
 - **Passar:** só quando não tem peça jogável **e** o monte está vazio.
 - A vez alterna depois de cada jogada ou passe.
@@ -85,12 +85,12 @@ import '@testing-library/jest-dom/vitest';
 const html = readFileSync(resolve(process.cwd(), 'index.html'), 'utf8');
 const corpo = html.match(/<body[^>]*>([\s\S]*)<\/body>/)[1];
 
-export async function abrirJogo(params = {}) {
+export async function abrirJogo(params = {}, opcoesUser = {}) {
   window.history.replaceState({}, '', '/?' + new URLSearchParams(params)); // parâmetros da seção 3
   document.body.innerHTML = corpo;          // mesmo HTML do jogo
   vi.resetModules();                        // cada teste começa um jogo novo
   await import('../js/main.js');            // vazio por enquanto; na fase GREEN, inicia o jogo
-  return userEvent.setup();                 // "user" para clicar como um jogador
+  return userEvent.setup(opcoesUser);       // "user" para clicar como um jogador
 }
 ```
 
@@ -113,7 +113,7 @@ test('TC-XX-01 exemplo', async () => {
 - Os testes **só** acessam o jogo pelo que o usuário vê/clica: `screen.getByTestId(...)`, `getByRole(...)` e `user.click`, `user.dblClick`, `user.pointer(...)`. Nada de importar `js/*.js` ou chamar funções internas.
 - Clique direito: `await user.pointer({ keys: '[MouseRight]', target: elemento })`. Clique duplo: `await user.dblClick(elemento)`.
 - O jsdom **não lê CSS**. Esconder/mostrar se confere pelo atributo `hidden` (`toBeVisible()`); bloqueio, pelo `disabled` (`toBeDisabled()`).
-- Tempo (cronômetro): `vi.useFakeTimers()` no teste, `userEvent.setup({ advanceTimers: vi.advanceTimersByTime })` e `vi.advanceTimersByTime(2000)` para "esperar" 2 s sem esperar de verdade.
+- Tempo (cronômetro): `vi.useFakeTimers()` no teste, `abrirJogo(params, { advanceTimers: vi.advanceTimersByTime })` e `vi.advanceTimersByTime(2000)` para "esperar" 2 s sem esperar de verdade.
 - Todo elemento que um teste usa tem `data-testid` (lista na seção 3). Se precisar de um novo, adicione na seção 3 no mesmo PR.
 - Aleatoriedade é controlada por **parâmetros de URL** (seção 3). Um teste nunca depende de sorte.
 - Cada caso de teste da seção 5 vira um `test('TC-XX-NN ...')` com o **mesmo ID no título** (o verificador exige).
@@ -186,7 +186,7 @@ desafio_teste_domino/
 | `j2` | `?j2=…` | Mão do J2 |
 | `monte` | `?monte=0-0,0-1` ou `?monte=` (vazio) | Monte, na ordem de compra |
 
-Se qualquer um dos três for usado, **só existem as peças listadas** (as outras ficam fora da partida). Assim dá para montar cenários pequenos.
+Se qualquer um dos três for usado, **só existem as peças listadas** (as outras ficam fora da partida). Assim dá para montar cenários pequenos. Com esses parâmetros, a partida **já começa ao abrir a página**, sem clicar em `btn-nova-partida`.
 
 Cenário fixo usado nos testes de jogada (fica no `tests/helpers.js`):
 `CENARIO_JOGADAS` = `?j1=6-6,1-3,0-0&j2=3-6,1-6,2-2&monte=` — J1 começa (tem 6-6).
