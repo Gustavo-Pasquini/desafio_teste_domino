@@ -23,7 +23,7 @@ test.each([
 ])('TC-DO-15 jogo trancado dá vitória a %s', async (vencedor, cenario, placar, pontos) => {
   const user = await abrirJogo(cenario);
   await jogarPeca(user, 'j1', '6-6');
-  expect(screen.getByTestId('mensagem')).toHaveTextContent(`Jogo trancado — ${vencedor} venceu!`);
+  expect(screen.getByTestId('mensagem')).toHaveTextContent(new RegExp(`^Jogo trancado — ${vencedor} venceu!$`));
   expect(screen.getByTestId(placar)).toHaveTextContent(new RegExp(`^${pontos}$`));
 });
 
