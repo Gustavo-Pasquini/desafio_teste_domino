@@ -19,6 +19,7 @@ test('TC-DO-06 a peça encaixa na ponta com o mesmo número', async () => {
   const user = await abrirJogo(CENARIO_JOGADAS);
   await ateTC06(user);
   expect(pecasDaMesa()).toEqual(['6-6', '6-3']); // pontas iguais (6 e 6): entra à direita
+  expect(screen.getByTestId('escolha-lado')).not.toBeVisible(); // ... sem perguntar
   expect(screen.getByTestId('ponta-esquerda')).toHaveTextContent(/^6$/);
   expect(screen.getByTestId('ponta-direita')).toHaveTextContent(/^3$/);
   expect(screen.getByTestId('vez')).toHaveTextContent(/^J1$/);
