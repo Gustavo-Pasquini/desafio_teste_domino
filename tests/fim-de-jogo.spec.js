@@ -1,5 +1,4 @@
 // Testes de batida, jogo trancado e nova partida (Breno — B4 e B5).
-import { test, expect } from 'vitest';
 import { abrirJogo, screen, within, jogarPeca, pecasNaMao } from './helpers.js';
 
 test.each([

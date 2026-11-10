@@ -1,6 +1,5 @@
 // Testes de jogar peças na mesa (Gustavo — G4, G5). Casos da seção 5 do PLANEJAMENTO.md.
 // Modo somente testes: o jogo ainda não existe, então estes testes FALHAM de propósito.
-import { test, expect } from 'vitest';
 import { abrirJogo, screen, pecasNaMao, jogarPeca, pecasDaMesa, CENARIO_JOGADAS } from './helpers.js';
 
 // CENARIO_JOGADAS: J1 = 6-6, 1-3, 0-0 · J2 = 3-6, 1-6, 2-2 · monte vazio.
