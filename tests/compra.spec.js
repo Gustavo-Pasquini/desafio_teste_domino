@@ -1,5 +1,4 @@
 // Testes de compra e passe (Breno — B2 e B3).
-import { test, expect } from 'vitest';
 import { abrirJogo, screen, pecasNaMao, jogarPeca } from './helpers.js';
 
 test('TC-DO-11 comprar fica desabilitado quando há jogada', async () => {
