@@ -12,3 +12,13 @@ test('TC-DO-22 peças que podem ser jogadas ficam destacadas', async () => {
   expect(marcadas('j2').sort()).toEqual(['peca-1-6', 'peca-3-6']);
   expect(marcadas('j1')).toEqual([]);
 });
+
+test('TC-DO-23 sem peça jogável, o botão comprar é sugerido', async () => {
+  const user = await abrirJogo({ j1: '6-6,5-5', j2: '0-1,2-3', monte: '0-0,1-2,4-6' });
+  expect(marcadas('j1')).toEqual(['peca-6-6']);
+  expect(screen.getByTestId('btn-comprar')).not.toHaveAttribute('data-sugerido', 'true');
+  await jogarPeca(user, 'j1', '6-6');
+  expect(pecasNaMao('j2')).toHaveLength(2);
+  expect(marcadas('j2')).toEqual([]);
+  expect(screen.getByTestId('btn-comprar')).toHaveAttribute('data-sugerido', 'true');
+});
