@@ -1,52 +1,76 @@
 # desafio_teste_domino
 
-**Dominó** — Partida de dominó para 2 jogadores: casos de teste de interface em JavaScript (Vitest + Testing Library). O jogo em si não é implementado por enquanto: os testes ficam falhando pelo motivo certo.
-
-> 📋 O que cada integrante vai fazer, as regras do jogo e todos os casos de teste estão em **[PLANEJAMENTO.md](PLANEJAMENTO.md)**.
+Desafio de testes: casos de teste para testar **uma partida de dominó para 2 jogadores**, com **casos de teste em JavaScript para testar JavaScript** (Jest + Testing Library).
 
 ## Colaboradores
 
-| Nome | RA | GitHub |
-|---|---|---|
-| Breno Bertaglia Nosima | 24113673-2 | [BrenoNosima](https://github.com/BrenoNosima) |
-| Gustavo Mazeto Pasquini | 24183078-2 | [Gustavo-Pasquini](https://github.com/Gustavo-Pasquini) |
+| Nome | RA | GitHub | Parte no trabalho |
+|---|---|---|---|
+| Breno Bertaglia Nosima | 24113673-2 | [BrenoNosima](https://github.com/BrenoNosima) | Tarefas B1–B5: CI, documentação dos testes e 7 casos de teste |
+| Gustavo Mazeto Pasquini | 24183078-2 | [Gustavo-Pasquini](https://github.com/Gustavo-Pasquini) | Tarefas G1–G6: estrutura do projeto e 16 casos de teste |
 
-A divisão do trabalho (quem faz cada tarefa e cada caso de teste) está em [PLANEJAMENTO.md](PLANEJAMENTO.md).
+As contribuições de cada um aparecem em **Insights → Contributors** e nos commits. A divisão das tarefas e as regras completas estão em [PLANEJAMENTO.md](PLANEJAMENTO.md).
 
 ## Como rodar
 
-Requisitos: Node.js 18+.
+Requisitos: Node.js 18 ou superior.
 
 ```bash
 npm install
-npm test              # roda os testes de interface (por enquanto todos falham, de propósito)
-npm run verificar     # confere se cada teste falha pelo motivo certo e tem um ID do plano
+npm test                    # roda todos os casos de teste (Jest)
+npm run verificar           # confere o motivo de cada falha e o ID de cada teste
+npm run verificar:completo  # idem + confere que todo caso do plano tem teste
+npx jest tests/<arquivo>.spec.js -t "TC-XX-NN"   # um caso só
 ```
 
 ## Funcionamento dos casos de teste
 
-> ⚠️ **Entrega atual: somente os casos de teste.** O jogo não é implementado até segunda ordem, então **todos os testes falham de propósito**. O que importa é que cada um falhe **pelo motivo certo**, porque o comportamento descrito ainda não existe, e não por erro no próprio teste. O `npm run verificar` confere isso.
+**Situação atual:** somente os casos de teste. O jogo ainda não está implementado, então **todos os testes falham de propósito**, pelo motivo certo (o comportamento ainda não existe). O `npm run verificar` confere isso.
 
-- **Tipo:** testes de interface, em JavaScript, com [Vitest](https://vitest.dev) + [Testing Library](https://testing-library.com). Cada teste carrega o `index.html` (esqueleto da tela) num navegador simulado (jsdom), clica nos elementos como um jogador (`user-event`) e confere o que deveria aparecer na tela.
-- **Metodologia (TDD, fase RED):** cada caso é escrito a partir da especificação, **um por vez**: escrever → rodar → ver falhar pelo motivo certo → commit `test:`. O passo a passo está em [`.claude/skills/tdd/SKILL.md`](.claude/skills/tdd/SKILL.md).
-- **Onde ficam:** pasta `tests/`, um arquivo `*.spec.js` por grupo de regras. `tests/helpers.js` tem a função `abrirJogo(params)`, que monta a tela.
-- **Como os elementos são encontrados:** pelo atributo `data-testid` de cada elemento da tela (contrato na seção 3 do PLANEJAMENTO.md).
-- **Sem sorte nos testes:** a partida pode ser montada pela URL (por exemplo, a ordem das cartas/peças/minas), então cada teste sempre começa do mesmo cenário.
-- **Rastreabilidade:** cada teste tem no título o ID do caso (`TC-..-NN`), igual à tabela do PLANEJAMENTO.md.
-- **Como rodar:** `npm test` (todos), `npx vitest run tests/<arquivo>.spec.js` (um arquivo), `npm run test:ui` (interface visual), `npm run verificar` (motivo da falha) e `npm run verificar:completo` (idem + TCs que faltam).
+- **Ferramentas:** [Jest](https://jestjs.io) roda os testes; [Testing Library](https://testing-library.com) (`@testing-library/dom`, `user-event` e `jest-dom`) simula o jogador; o [jsdom](https://github.com/jsdom/jsdom) faz o papel do navegador, sem precisar abrir um.
+- **Testes de interface:** cada teste abre o `index.html` do jogo pela função `abrirJogo(params)` de `tests/helpers.js`, clica como um jogador e confere o que aparece na tela. Os testes não chamam funções internas do jogo.
+- **Elementos da tela:** encontrados pelo atributo `data-testid` (contrato na seção 3 do PLANEJAMENTO.md).
+- **Sem depender de sorte:** o cenário (cartas, minas, peças, frota, puzzle) é montado por parâmetros de URL, então cada teste começa sempre do mesmo jeito. O tempo usa relógio falso (`jest.useFakeTimers()`).
+- **Rastreabilidade:** cada teste tem no título o ID do caso (`TC-..-NN`), o mesmo da tabela abaixo e da seção 5 do PLANEJAMENTO.md.
+- **Metodologia:** TDD, um caso de teste por vez: escrever, rodar, ver falhar pelo motivo certo e fazer o commit `test:`.
+- **Integração contínua:** o GitHub Actions roda `npm ci` e `npm run verificar` em todo push e Pull Request.
 
-## Desenvolvimento com agentes de IA
+## Casos de teste (23)
 
-O projeto está preparado para **Claude Code** e **Codex**. Os dois escrevem os testes um por vez e conferem o motivo de cada falha. Cada um tem a skill `tdd` e um hook que roda o verificador a cada edição. O Claude Code também tem sub-agentes separados para escrever e para revisar.
+| ID | Cenário | Arquivo | Resultado esperado | Autor |
+|---|---|---|---|---|
+| TC-DO-01 | Distribuição | `tests/distribuicao.spec.js` | `mao-j1` e `mao-j2` com 7 peças; `monte-qtd` = 14; `mesa` vazia | Gustavo |
+| TC-DO-02 | 28 peças sem repetir | `tests/distribuicao.spec.js` | Todas de `0-0` a `6-6`, nenhuma repetida | Gustavo |
+| TC-DO-03 | Maior dupla começa | `tests/distribuicao.spec.js` | `vez` = J2 | Gustavo |
+| TC-DO-04 | Dupla obrigatória | `tests/distribuicao.spec.js` | `mensagem` = "Jogada inválida"; mesa vazia. Clicar 6-6 → mesa = `6-6` | Gustavo |
+| TC-DO-05 | Sem duplas | `tests/distribuicao.spec.js` | `vez` = J1 (5-6 tem a maior soma); só 5-6 pode ser jogada primeiro | Gustavo |
+| TC-DO-06 | Encaixe | `tests/jogadas.spec.js` | `mesa` = `6-6`, `6-3`; `ponta-esquerda` = 6, `ponta-direita` = 3; `vez` = J1 | Gustavo |
+| TC-DO-07 | Peça girada | `tests/jogadas.spec.js` | Na mesa aparece `3-1`; `ponta-direita` = 1; não aparece `escolha-lado` | Gustavo |
+| TC-DO-08 | Jogada inválida | `tests/jogadas.spec.js` | `mensagem` = "Jogada inválida"; 0-0 continua na mão; `vez` continua J1 | Gustavo |
+| TC-DO-09 | Escolher o lado | `tests/jogadas.spec.js` | `escolha-lado` aparece; `btn-esquerda` → peça entra à esquerda como `1-6` e `ponta-esquerda` = 1 | Gustavo |
+| TC-DO-10 | Mão escondida | `tests/distribuicao.spec.js` | Peças do jogador da vez `data-face="cima"`, do outro `"baixo"`; depois de jogar, invertem | Gustavo |
+| TC-DO-11 | Comprar só sem jogada | `tests/compra.spec.js` | Para J2 (tem 6-2) `btn-comprar` desabilitado | Breno |
+| TC-DO-12 | Comprar até conseguir jogar | `tests/compra.spec.js` | J2: `btn-comprar` habilitado; comprar 3 vezes → `monte-qtd` = 0 e 4-6 na mão; depois de pegar 4-6, `btn-comprar` desabilita | Breno |
+| TC-DO-13 | Passar | `tests/compra.spec.js` | J2: `btn-comprar` desabilitado, `btn-passar` habilitado; passar → `vez` = J1 | Breno |
+| TC-DO-14 | Batida | `tests/fim-de-jogo.spec.js` | `mensagem` = "Jogador 1 venceu!"; `pontos-j1` = 6 (2+4+0+0); peças travadas | Breno |
+| TC-DO-15 | Jogo trancado | `tests/fim-de-jogo.spec.js` | `mensagem` = "Jogo trancado — Jogador 1 venceu!" (1 ponto contra 13); `pontos-j1` = 13 | Breno |
+| TC-DO-16 | Trancado com empate | `tests/fim-de-jogo.spec.js` | Somas 4 × 4 (1+3 = 4; 2+2 = 4); `mensagem` = "Empate"; ninguém pontua | Breno |
+| TC-DO-17 | Nova partida | `tests/fim-de-jogo.spec.js` | 7 peças para cada um, monte 14, mesa vazia, `mensagem` vazia | Breno |
+| TC-DO-18 | Dupla vence soma | `tests/distribuicao.spec.js` | `vez` = J1; J1 joga 1-1 → mesa = `1-1` | Gustavo |
+| TC-DO-19 | Maior dupla entre várias | `tests/distribuicao.spec.js` | `vez` = J2; 1-2 → "Jogada inválida"; 5-5 → mesa = `5-5` | Gustavo |
+| TC-DO-20 | Escolher o lado direito | `tests/jogadas.spec.js` | Mesa = `6-6`, `6-3`, `3-1`, `1-6`; `ponta-direita` = 6 | Gustavo |
+| TC-DO-21 | Girar na ponta esquerda | `tests/jogadas.spec.js` | Mesa = `5-2`, `2-6`, `6-6`, `6-3`; `ponta-esquerda` = 5 | Gustavo |
+| TC-DO-22 | Peças jogáveis destacadas | `tests/dicas.spec.js` | Antes: só 6-6 de J1 marcada (saída obrigatória). Depois: 3-6 e 1-6 de J2 marcadas, 2-2 não; nada marcado em J1 | Gustavo |
+| TC-DO-23 | Sugerir comprar | `tests/dicas.spec.js` | Na vez de J1, `btn-comprar` sem sugestão; na de J2, nenhuma peça marcada e `btn-comprar` com `data-sugerido="true"` | Gustavo |
 
-- Claude Code: `/tdd G2` · Codex: `$tdd G2` · depois, "go" escreve o próximo caso de teste.
-- Detalhes, técnicas e fontes: [docs/TDD-COM-IA.md](docs/TDD-COM-IA.md).
+## Estrutura
 
-## Rastreabilidade dos testes
-
-| IDs | Arquivo | O que verifica |
-|---|---|---|
-| TC-DO-01–05, 10, 18–19 | `tests/distribuicao.spec.js` | Distribuição, peças, faces e jogador inicial |
-| TC-DO-06–09, 20–21 | `tests/jogadas.spec.js` | Encaixe, giro, jogada inválida e escolha do lado |
-| TC-DO-11–13 | `tests/compra.spec.js` | Compra do monte e passe |
-| TC-DO-14–17 | `tests/fim-de-jogo.spec.js` | Batida, pontuação, jogo trancado, empate e nova partida |
+```
+index.html                esqueleto da tela (elementos da seção 3)
+js/main.js                ponto de entrada do jogo
+tests/helpers.js          abrirJogo(), cenários fixos e atalhos
+tests/*.spec.js           casos de teste
+scripts/verificar-testes.mjs  verificador (npm run verificar e CI)
+PLANEJAMENTO.md           regras, contrato, tarefas e casos de teste
+docs/                     matriz de cobertura e TDD com IA
+```
