@@ -21,6 +21,7 @@ Partida de dominó para **2 jogadores**: **casos de teste de interface em JavaSc
 - A vez alterna depois de cada jogada ou passe.
 - **Batida:** quem jogar a última peça da mão vence e marca a soma dos pontos que sobraram na mão do adversário.
 - **Jogo trancado:** monte vazio e nenhum dos dois consegue jogar. Vence quem tem **menos pontos** na mão e marca a soma da mão do adversário. Somas iguais → **empate**.
+- **Dicas:** na mão do jogador da vez, as peças que podem ser jogadas têm `data-jogavel="true"`. Sem nenhuma, `btn-comprar` ganha `data-sugerido="true"`.
 
 ## 2. Stack, comandos e estrutura
 
@@ -220,6 +221,7 @@ Cada integrante é **dono de arquivos de teste diferentes** (coluna "Arquivos").
 | **G3** Quem começa | `gustavo/g3-quem-comeca` | tests/distribuicao.spec.js | TC-DO-03 a 05, 18, 19 |
 | **G4** Encaixar e girar peças, jogada inválida, alternar vez | `gustavo/g4-jogadas` | tests/jogadas.spec.js | TC-DO-06 a 08, 21 |
 | **G5** Escolher o lado | `gustavo/g5-lado` | tests/jogadas.spec.js | TC-DO-09, 20 |
+| **G6** Dicas: peças jogáveis e comprar | `gustavo/g6-dicas` | tests/dicas.spec.js | TC-DO-22, 23 |
 
 ### Breno
 
@@ -251,6 +253,8 @@ Cada integrante é **dono de arquivos de teste diferentes** (coluna "Arquivos").
 | TC-DO-19 | Maior dupla entre várias | `j1=3-3,5-6`, `j2=5-5,1-2`, `monte=` (J1 tem a maior soma; J2, a maior dupla) | `vez` = J2; 1-2 → "Jogada inválida"; 5-5 → mesa = `5-5` |
 | TC-DO-20 | Escolher o lado direito | Depois do TC-DO-07 (pontas 6 e 1), J2 clica 1-6 e `btn-direita` | Mesa = `6-6`, `6-3`, `3-1`, `1-6`; `ponta-direita` = 6 |
 | TC-DO-21 | Girar na ponta esquerda | `j1=6-6,2-6,0-0`, `j2=3-6,2-5,1-1`, `monte=`: 6-6, 3-6, 2-6, 2-5 | Mesa = `5-2`, `2-6`, `6-6`, `6-3`; `ponta-esquerda` = 5 |
+| TC-DO-22 | Peças jogáveis destacadas | `CENARIO_JOGADAS`; J1 joga 6-6 | Antes: só 6-6 de J1 marcada (saída obrigatória). Depois: 3-6 e 1-6 de J2 marcadas, 2-2 não; nada marcado em J1 |
+| TC-DO-23 | Sugerir comprar | `j1=6-6,5-5`, `j2=0-1,2-3`, `monte=0-0,1-2,4-6`; J1 joga 6-6 | Na vez de J1, `btn-comprar` sem sugestão; na de J2, nenhuma peça marcada e `btn-comprar` com `data-sugerido="true"` |
 
 ### Breno — compra, passe e fim da partida
 
