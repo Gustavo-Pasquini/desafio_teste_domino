@@ -27,8 +27,9 @@ test.each([
 });
 
 test.each([
-  ['J1', { j1: '6-6,0-4', j2: '1-3,2-2', monte: '' }, 'j1'],
-  ['J2', { j1: '1-3,2-2', j2: '6-6,0-4', monte: '' }, 'j2'],
+  // Depois do 6-6, as duas mãos somam 4 (0+4 e 1+3): empate de verdade.
+  ['J1', { j1: '6-6,0-4', j2: '1-3', monte: '' }, 'j1'],
+  ['J2', { j1: '1-3', j2: '6-6,0-4', monte: '' }, 'j2'],
 ])('TC-DO-16 jogo trancado com empate começando por %s', async (_inicio, cenario, jogador) => {
   const user = await abrirJogo(cenario);
   await jogarPeca(user, jogador, '6-6');
